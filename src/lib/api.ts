@@ -1,0 +1,28 @@
+import type { ApiResponse } from '@/types/shared';
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api/v1';
+
+interface RequestOptions {
+	method?: 'GET' | 'POST' | 'PATCH' | 'DELETE';
+	body?: unknown;
+	token?: string;
+}
+
+export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
+	const res = await fetch(`${API_BASE_URL}${path}`, {
+		method: options.method ?? 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			...(options.token ? { Authorization: `Bearer ${options.token}` } : {})
+		},
+		body: options.body ? JSON.stringify(options.body) : undefined
+	});
+
+	const json: ApiResponse<T> = await res.json();
+
+	if (!res.ok || !json.success) {
+		throw new Error(json.message || 'Request failed');
+	}
+
+	return json.data as T;
+}
