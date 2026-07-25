@@ -3,6 +3,11 @@
 // If this drift becomes a real problem, the fix is a shared `packages/types`
 // workspace both projects pull from -- not worth the setup cost yet.
 
+export enum UserType {
+	Individual = 'individual',
+	Organization = 'organization'
+}
+
 export enum CampaignStatus {
 	DRAFT = 'draft',
 	ACTIVE = 'active',

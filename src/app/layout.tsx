@@ -1,30 +1,27 @@
-import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
-import { SiteHeader } from '@/components/site-header';
-import './globals.css';
-
-const geistSans = Geist({
-	variable: '--font-geist-sans',
-	subsets: ['latin']
-});
-
-const geistMono = Geist_Mono({
-	variable: '--font-geist-mono',
-	subsets: ['latin']
-});
+import type { Metadata } from "next";
+import { Toaster } from "sonner";
+import { Providers } from "@/providers/providers";
+import "./globals.css";
 
 export const metadata: Metadata = {
-	title: 'PhishGuard — Security Awareness Training',
-	description: 'Phishing simulation and security awareness training platform.'
+  title: "PhishGuard — Security Awareness Training",
+  description: "Phishing simulation and security awareness training platform.",
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-	return (
-		<html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-			<body className="flex min-h-full flex-col bg-surface-muted">
-				<SiteHeader />
-				<div className="flex-1">{children}</div>
-			</body>
-		</html>
-	);
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
+  return (
+    <html lang="en">
+      <body
+        className="bg-bue-500 h-screen w-full"
+        suppressHydrationWarning={true}
+      >
+        <main className="bg-=500 h-full w-full">
+          <Toaster position="top-center" duration={5000} richColors />
+          <Providers>{children}</Providers>
+        </main>
+      </body>
+    </html>
+  );
 }
