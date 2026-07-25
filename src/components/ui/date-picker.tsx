@@ -139,39 +139,48 @@ export const DatePicker = ({
 			</button>
 
 			{isCalendarOpen && (
-				<div className="absolute z-50 my-2 rounded-xl border bg-white shadow-lg">
-					<Calendar
-						id="calendar"
-						mode="single"
-						showTime
-						time={selectedTime}
-						selected={selectedDate}
-						onSelect={handleDateSelect}
-						onTimeChange={handleTimeChange}
-						fromDate={minDate}
-						initialFocus
-						className="w-full"
-					/>
-					<div className="flex justify-end gap-2 border-t p-3">
-						<Button
-							type="button"
-							variant="outline"
-							size="sm"
-							onClick={handleCancel}
-						>
-							Cancel
-						</Button>
-						<Button
-							type="button"
-							size="sm"
-							onClick={handleConfirm}
-							disabled={!selectedDate}
-						>
-							Confirm
-						</Button>
-					</div>
-				</div>
-			)}
+	<div className="absolute z-50 my-2 rounded-xl border bg-white shadow-lg">
+		<Calendar
+	id="calendar"
+	mode="single"
+	selected={selectedDate}
+	onSelect={handleDateSelect}
+	disabled={{ before: minDate }}
+	autoFocus
+	className="w-full"
+/>
+		<div className="flex items-center gap-2 border-t px-4 py-3">
+			<label htmlFor="date-picker-time" className="text-muted-foreground text-sm">
+				Time
+			</label>
+			<input
+				id="date-picker-time"
+				type="time"
+				value={selectedTime}
+				onChange={(e) => handleTimeChange(e.target.value)}
+				className="border-input rounded-md border px-2 py-1 text-sm"
+			/>
+		</div>
+		<div className="flex justify-end gap-2 border-t p-3">
+			<Button
+				type="button"
+				variant="outline"
+				size="sm"
+				onClick={handleCancel}
+			>
+				Cancel
+			</Button>
+			<Button
+				type="button"
+				size="sm"
+				onClick={handleConfirm}
+				disabled={!selectedDate}
+			>
+				Confirm
+			</Button>
+		</div>
+	</div>
+)}
 		</div>
 	);
 };
