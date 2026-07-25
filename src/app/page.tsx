@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Card } from '@/components/ui';
+import { VideoShowcase } from '@/components/video-showcase';
 
 export default function Home() {
 	return (
@@ -64,6 +65,11 @@ export default function Home() {
 					</Card>
 				</div>
 			</section>
+
+			<VideoShowcase
+				title="Watch a simulation run end to end"
+				description="From the moment a lure lands in the sandbox inbox to the lesson screen someone sees after clicking."
+			/>
 
 			<section className="px-6 py-20">
 				<div className="mx-auto max-w-5xl">
