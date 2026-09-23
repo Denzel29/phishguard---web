@@ -47,12 +47,12 @@ export const FeaturesGrid = ({
               className="space-y-2 rounded-xl bg-white p-2 transition-shadow duration-200 hover:shadow-lg"
             >
               <div className="flex items-center space-x-2">
-                <feature.icon className="h-5 w-5 flex-shrink-0" />
+                <feature.icon className="h-5 w-5 flex-shrink-0 text-[#2b1ec9]" />
                 <h3 className="text-lg font-semibold text-gray-900">
                   {feature.title}
                 </h3>
               </div>
-              <p className="ml-9 leading-relaxed text-gray-600">
+              <p className="ml-1 leading-relaxed text-gray-600">
                 {feature.description}
               </p>
             </div>

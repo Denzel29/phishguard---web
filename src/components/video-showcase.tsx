@@ -15,7 +15,7 @@ export function VideoShowcase({ title, description, videoSrc }: VideoShowcasePro
 	const [playing, setPlaying] = useState(false);
 
 	return (
-		<section className="px-6 py-20">
+		<section className="px-2 py-5">
 			<div className="mx-auto max-w-4xl">
 				<div className="mx-auto mb-10 max-w-xl text-center">
 					<span className="mb-2 block text-xs font-bold uppercase tracking-wide text-brand">

@@ -12,10 +12,10 @@ export const HeroSection = ({ userType }: HeroSectionProps) => {
   return (
     <div className="lg:flex lg:space-x-20">
       <div className="lg:w-2/4">
-        <h2 className="mb-4 text-4xl font-bold tracking-wide lg:text-6xl">
-          Learn to spot the <span className="text-orange-500">Hook</span> before
+        <h3 className="mb-4 text-4xl font-bold tracking-wide lg:text-5xl">
+          Learn to spot the <span className="text-[#332c8e]">Hook</span> before
           it's too late
-        </h2>
+        </h3>
         <p className="mb-2 text-lg tracking-wide text-gray-500 md:text-xl">
           Realistic phishing simulations that run entirely in a sandbox, no real
           emails ever leave this app, whether you&apos;re training a whole org

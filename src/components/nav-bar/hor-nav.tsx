@@ -22,7 +22,12 @@ export const HorizontalNav = ({
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <Image src="/logo.svg" alt="Huza Logo" width={150} height={150} />
+              <Image
+                src="/logo3.png"
+                alt="Baitline Logo"
+                width={150}
+                height={100}
+              />
             </Link>
           </div>
 
