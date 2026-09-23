@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Button } from "../ui";
 import { DashLogin } from "./dash-login";
+import { Registration } from "./registration";
 
 export const LoginForm = () => {
   const [activeTab, setActiveTab] = useState<"login" | "register">("login");
@@ -27,29 +28,35 @@ export const LoginForm = () => {
           </p>
         </div>
 
-        <div className="mx-auto flex w-full space-x-1 bg-gray-200 p-1 pr-2">
+        <div className="mx-auto flex w-full space-x-1 bg-gray-200 p-1 rounded-md pr-2">
           <Button
-            className={`w-1/2 cursor-pointer rounded-md py-1 ${activeTab === "login" ? "border border-gray-300 bg-white font-bold text-gray-900" : "text-gray-600"}`}
-            variant={activeTab === "login" ? "primary" : "ghost"}
+            type="button"
+            variant="ghost"
+            className={`w-1/2 cursor-pointer rounded-md py-1 ${
+              activeTab === "login"
+                ? "border border-gray-300 bg-white font-bold text-gray-900 shadow-sm hover:bg-white hover:text-gray-900"
+                : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+            }`}
             onClick={() => setActiveTab("login")}
           >
             Login
           </Button>
 
           <Button
-            className={`w-1/2 cursor-pointer rounded-md py-1 ${activeTab === "register" ? "border border-gray-300 bg-white font-bold text-gray-900" : "text-gray-600"}`}
-            variant={activeTab === "register" ? "primary" : "ghost"}
+            type="button"
+            variant="ghost"
+            className={`w-1/2 cursor-pointer rounded-md py-1 ${
+              activeTab === "register"
+                ? "border border-gray-300 bg-white font-bold text-gray-900 shadow-sm hover:bg-white hover:text-gray-900"
+                : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+            }`}
             onClick={() => setActiveTab("register")}
           >
             Sign Up
           </Button>
         </div>
 
-        {activeTab === "login" ? (
-          <DashLogin />
-        ) : (
-          <div>Sign up form goes here</div>
-        )}
+        {activeTab === "login" ? <DashLogin /> : <Registration />}
       </section>
     </>
   );

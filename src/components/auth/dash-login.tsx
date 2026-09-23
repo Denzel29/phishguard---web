@@ -91,17 +91,17 @@ export const DashLogin = () => {
                         <Image
                           src="/eye-open.svg"
                           alt="show password"
-                          width={20}
-                          height={20}
+                          width={30}
+                          height={30}
                           className={`absolute top-1/2 right-3 -translate-y-1/2 transform cursor-pointer ${
                             showPassword ? "hidden" : ""
                           }`}
                         />
                         <Image
-                          src="/eye-close.svg"
+                          src="/eye-closed.svg"
                           alt="hide password"
-                          width={20}
-                          height={20}
+                          width={30}
+                          height={30}
                           className={`absolute top-1/2 right-3 -translate-y-1/2 transform cursor-pointer ${
                             showPassword ? "" : "hidden"
                           }`}
@@ -117,7 +117,7 @@ export const DashLogin = () => {
           {/* <FormError message="" />
           <FormSuccess message="" /> */}
           <p
-            className="mb-[0px] mb-[5px] cursor-pointer text-right text-sm text-orange-500 transition-all duration-200 hover:underline"
+            className="mb-[0px] mb-[5px] cursor-pointer text-right text-sm text-[#2016a9] transition-all duration-200 hover:underline"
             onClick={() => {
               // const params = new URLSearchParams({
               //   profile: profile ? String(profile) : "",
