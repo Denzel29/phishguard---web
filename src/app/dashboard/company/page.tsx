@@ -2,12 +2,13 @@
 
 import { useAuth } from "@/providers/auth-provider";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { Building2, Users, Target, BarChart3, Mail, LogOut } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Building2, Users, Target, BarChart3, Mail, LogOut, Menu, X } from "lucide-react";
 
 export default function CompanyDashboardPage() {
   const { user, isAuthenticated, logout } = useAuth();
   const router = useRouter();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -36,7 +37,8 @@ export default function CompanyDashboardPage() {
               <p className="text-xs text-gray-500">Organization Dashboard</p>
             </div>
           </div>
-          <div className="flex items-center gap-4">
+          {/* Desktop User Menu */}
+          <div className="hidden items-center gap-4 md:flex">
             <span className="text-sm text-gray-600">{user.email}</span>
             <span className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-medium text-indigo-700">
               {user.roleName}
@@ -49,7 +51,34 @@ export default function CompanyDashboardPage() {
               Logout
             </button>
           </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden rounded-lg p-2 text-gray-600 hover:bg-gray-100"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
         </div>
+
+        {/* Mobile Menu Dropdown */}
+        {isMobileMenuOpen && (
+          <div className="border-t border-gray-100 bg-gray-50 px-6 py-4 md:hidden">
+            <div className="flex flex-col gap-3">
+              <span className="text-sm font-medium text-gray-900">{user.email}</span>
+              <span className="w-fit rounded-full bg-indigo-100 px-3 py-1 text-xs font-medium text-indigo-700">
+                {user.roleName}
+              </span>
+              <button
+                onClick={handleLogout}
+                className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
+              >
+                <LogOut className="h-4 w-4" />
+                Logout
+              </button>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Content */}
