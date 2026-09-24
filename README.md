@@ -10,6 +10,7 @@ no server-rendering or API routes live in this app.
 cp .env.local.example .env.local
 npm install
 npm run dev              # http://localhost:3000
+
 ```
 
 The backend must be running at `http://localhost:4000` (or set
