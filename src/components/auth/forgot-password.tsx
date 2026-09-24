@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { toast } from "sonner";
+import { apiRequest } from "@/lib/api";
 import { Button, Input } from "../ui";
 import {
   Form,
@@ -36,13 +38,16 @@ export const ForgotPassword = ({ onBackToLogin }: ForgotPasswordProps) => {
     },
   });
 
-  const onSubmit = (data: ForgotPasswordSchema) => {
+  const onSubmit = async (data: ForgotPasswordSchema) => {
     setIsLoading(true);
     try {
-      console.log("Forgot password request for:", data.email);
+      await apiRequest("/auth/forgot-password", {
+        method: "POST",
+        body: { email: data.email },
+      });
       setIsSubmitted(true);
     } catch (error) {
-      console.log(error);
+      toast.error(error instanceof Error ? error.message : "Failed to send reset link");
     } finally {
       setIsLoading(false);
     }

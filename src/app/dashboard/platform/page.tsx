@@ -3,9 +3,9 @@
 import { useAuth } from "@/providers/auth-provider";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { Target, BookOpen, BarChart3, Play, LogOut } from "lucide-react";
+import { Shield, Users, Building2, BarChart3, Settings, LogOut } from "lucide-react";
 
-export default function UserDashboardPage() {
+export default function PlatformDashboardPage() {
   const { user, isAuthenticated, logout } = useAuth();
   const router = useRouter();
 
@@ -28,18 +28,18 @@ export default function UserDashboardPage() {
       <header className="border-b border-gray-200 bg-white shadow-sm">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-600 text-white">
-              <BookOpen className="h-5 w-5" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-600 text-white">
+              <Shield className="h-5 w-5" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-gray-900">My Dashboard</h1>
-              <p className="text-xs text-gray-500">Security Awareness Training</p>
+              <h1 className="text-lg font-bold text-gray-900">Platform Admin</h1>
+              <p className="text-xs text-gray-500">PhishGuard Control Center</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
             <span className="text-sm text-gray-600">{user.email}</span>
-            <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-medium text-emerald-700">
-              {user.roleName ?? "User"}
+            <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700">
+              {user.roleName}
             </span>
             <button
               onClick={handleLogout}
@@ -56,33 +56,49 @@ export default function UserDashboardPage() {
       <div className="mx-auto max-w-7xl px-6 py-8">
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-900">Welcome back, {user.name}</h2>
-          <p className="mt-1 text-gray-500">Practice identifying phishing attacks and track your progress.</p>
+          <p className="mt-1 text-gray-500">Manage organizations, users, and platform settings.</p>
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           <DashCard
-            icon={<Play className="h-6 w-6 text-blue-600" />}
-            title="My Campaigns"
-            description="View and participate in assigned simulations."
+            icon={<Building2 className="h-6 w-6 text-blue-600" />}
+            title="Organizations"
+            description="Onboard and manage companies on the platform."
             stat="—"
-            statLabel="Active campaigns"
+            statLabel="Total organizations"
             color="blue"
           />
           <DashCard
-            icon={<Target className="h-6 w-6 text-orange-600" />}
-            title="Sandbox"
-            description="Practice phishing detection in a safe environment."
-            stat=""
-            statLabel=""
-            color="orange"
+            icon={<Users className="h-6 w-6 text-green-600" />}
+            title="All Users"
+            description="View and manage all platform users."
+            stat="—"
+            statLabel="Total users"
+            color="green"
           />
           <DashCard
-            icon={<BarChart3 className="h-6 w-6 text-green-600" />}
-            title="My Reports"
-            description="Track your training progress and scores."
+            icon={<BarChart3 className="h-6 w-6 text-purple-600" />}
+            title="Platform Reports"
+            description="System-wide analytics and usage reports."
             stat="—"
-            statLabel="Training sessions"
-            color="green"
+            statLabel="Active campaigns"
+            color="purple"
+          />
+          <DashCard
+            icon={<Shield className="h-6 w-6 text-red-600" />}
+            title="Roles & Permissions"
+            description="Manage platform roles and access control."
+            stat="—"
+            statLabel="Defined roles"
+            color="red"
+          />
+          <DashCard
+            icon={<Settings className="h-6 w-6 text-gray-600" />}
+            title="Platform Settings"
+            description="Configure global platform settings."
+            stat=""
+            statLabel=""
+            color="gray"
           />
         </div>
       </div>
@@ -107,8 +123,10 @@ function DashCard({
 }) {
   const bgMap: Record<string, string> = {
     blue: "bg-blue-50",
-    orange: "bg-orange-50",
     green: "bg-green-50",
+    purple: "bg-purple-50",
+    red: "bg-red-50",
+    gray: "bg-gray-100",
   };
 
   return (

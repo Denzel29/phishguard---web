@@ -3,9 +3,9 @@
 import { useAuth } from "@/providers/auth-provider";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { Target, BookOpen, BarChart3, Play, LogOut } from "lucide-react";
+import { Building2, Users, Target, BarChart3, Mail, LogOut } from "lucide-react";
 
-export default function UserDashboardPage() {
+export default function CompanyDashboardPage() {
   const { user, isAuthenticated, logout } = useAuth();
   const router = useRouter();
 
@@ -28,18 +28,18 @@ export default function UserDashboardPage() {
       <header className="border-b border-gray-200 bg-white shadow-sm">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-600 text-white">
-              <BookOpen className="h-5 w-5" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#2016a9] text-white">
+              <Building2 className="h-5 w-5" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-gray-900">My Dashboard</h1>
-              <p className="text-xs text-gray-500">Security Awareness Training</p>
+              <h1 className="text-lg font-bold text-gray-900">Company Admin</h1>
+              <p className="text-xs text-gray-500">Organization Dashboard</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
             <span className="text-sm text-gray-600">{user.email}</span>
-            <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-medium text-emerald-700">
-              {user.roleName ?? "User"}
+            <span className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-medium text-indigo-700">
+              {user.roleName}
             </span>
             <button
               onClick={handleLogout}
@@ -56,33 +56,41 @@ export default function UserDashboardPage() {
       <div className="mx-auto max-w-7xl px-6 py-8">
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-900">Welcome back, {user.name}</h2>
-          <p className="mt-1 text-gray-500">Practice identifying phishing attacks and track your progress.</p>
+          <p className="mt-1 text-gray-500">Manage your organization&apos;s phishing simulations and team.</p>
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           <DashCard
-            icon={<Play className="h-6 w-6 text-blue-600" />}
-            title="My Campaigns"
-            description="View and participate in assigned simulations."
+            icon={<Target className="h-6 w-6 text-orange-600" />}
+            title="Campaigns"
+            description="Create and manage phishing simulation campaigns."
             stat="—"
             statLabel="Active campaigns"
-            color="blue"
-          />
-          <DashCard
-            icon={<Target className="h-6 w-6 text-orange-600" />}
-            title="Sandbox"
-            description="Practice phishing detection in a safe environment."
-            stat=""
-            statLabel=""
             color="orange"
           />
           <DashCard
-            icon={<BarChart3 className="h-6 w-6 text-green-600" />}
-            title="My Reports"
-            description="Track your training progress and scores."
+            icon={<Users className="h-6 w-6 text-blue-600" />}
+            title="Team Members"
+            description="Invite employees and manage team access."
             stat="—"
-            statLabel="Training sessions"
+            statLabel="Team members"
+            color="blue"
+          />
+          <DashCard
+            icon={<Mail className="h-6 w-6 text-green-600" />}
+            title="Scenarios"
+            description="Browse and assign phishing scenarios."
+            stat="—"
+            statLabel="Available scenarios"
             color="green"
+          />
+          <DashCard
+            icon={<BarChart3 className="h-6 w-6 text-purple-600" />}
+            title="Reports"
+            description="View organization-wide training results."
+            stat="—"
+            statLabel="Completion rate"
+            color="purple"
           />
         </div>
       </div>
@@ -106,9 +114,10 @@ function DashCard({
   color: string;
 }) {
   const bgMap: Record<string, string> = {
-    blue: "bg-blue-50",
     orange: "bg-orange-50",
+    blue: "bg-blue-50",
     green: "bg-green-50",
+    purple: "bg-purple-50",
   };
 
   return (

@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PhishGuard — Web
 
-## Getting Started
+Next.js + TypeScript frontend for the PhishGuard platform. Configured for
+static export (GitHub Pages compatible). All data comes from the Express API;
+no server-rendering or API routes live in this app.
 
-First, run the development server:
+## Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.local.example .env.local
+npm install
+npm run dev              # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The backend must be running at `http://localhost:4000` (or set
+`NEXT_PUBLIC_API_URL` in `.env.local`).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Start Next.js dev server |
+| `npm run build` | Static export to `out/` |
+| `npm start` | Serve production build |
+| `npm run lint` | Run ESLint |
+| `npm run type-check` | Run `tsc --noEmit` |
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/
+│   ├── dashboard/           # Role-based dashboard pages
+│   │   ├── page.tsx         #   Individual user dashboard
+│   │   ├── company/         #   Company admin (Org Owner) dashboard
+│   │   └── platform/        #   Platform admin (Super Admin) dashboard
+│   ├── login/               # Login page (alternate simple form)
+│   ├── register-organization/ # Org registration page
+│   ├── sandbox/             # Sandbox placeholder
+│   ├── schemas/             # Zod validation schemas
+│   ├── layout.tsx           # Root layout (Toaster, Providers)
+│   ├── page.tsx             # Landing page
+│   └── globals.css          # Global styles
+├── components/
+│   ├── auth/                # Auth forms (login, register, forgot password)
+│   ├── landing/             # Landing page components
+│   ├── nav-bar/             # Navigation bar
+│   └── ui/                  # Shared UI primitives (shadcn/ui + custom)
+├── lib/
+│   ├── api.ts               # API client (fetch wrapper)
+│   └── utils.ts             # Utility helpers
+├── providers/
+│   ├── auth-provider.tsx    # Auth context (login/logout, localStorage)
+│   └── providers.tsx        # App-level providers (QueryClient, Auth)
+└── types/
+    └── shared.ts            # Shared types mirroring server enums/interfaces
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Authentication Flow
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. User submits credentials on the login form (`DashLogin` component).
+2. Frontend calls `POST /api/v1/auth/login` via `apiRequest()`.
+3. On success, the `AuthProvider` stores the JWT token and user object in
+   `localStorage` and React state.
+4. `getDashboardRoute(user)` inspects `roleName` and `organizationId` to
+   determine the correct dashboard:
 
-## Deploy on Vercel
+   | Role | Redirect |
+   |------|----------|
+   | `Super Admin` | `/dashboard/platform` |
+   | `Org Owner` (with org) | `/dashboard/company` |
+   | `Individual` / other | `/dashboard` |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+5. Protected pages check `isAuthenticated` on mount and redirect to `/login`
+   if the user is not logged in.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Key Components
+
+| Component | Path | Purpose |
+|-----------|------|---------|
+| `LoginForm` | `components/auth/login-form.tsx` | Tab container (Login / Sign Up / Forgot Password) |
+| `DashLogin` | `components/auth/dash-login.tsx` | Login form with API call + redirect |
+| `ForgotPassword` | `components/auth/forgot-password.tsx` | Password reset form (UI only) |
+| `AuthProvider` | `providers/auth-provider.tsx` | Auth context + `useAuth()` hook |
+
+## Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `NEXT_PUBLIC_API_URL` | `http://localhost:4000/api/v1` | Backend API base URL |

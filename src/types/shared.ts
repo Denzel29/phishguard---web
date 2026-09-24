@@ -41,6 +41,7 @@ export interface AuthUser {
 	email: string;
 	organizationId: string | null;
 	roleId: string;
+	roleName: string | null;
 }
 
 export interface LoginResponse {

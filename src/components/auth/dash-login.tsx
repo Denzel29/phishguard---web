@@ -3,6 +3,7 @@
 import { LoginSchema, loginSchema } from "@/app/schemas/auth";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Input } from "../ui";
 import {
@@ -15,6 +16,10 @@ import {
 } from "../ui/form";
 import Image from "next/image";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { apiRequest } from "@/lib/api";
+import { useAuth, getDashboardRoute } from "@/providers/auth-provider";
+import type { LoginResponse } from "@/types/shared";
 
 interface DashLoginProps {
   onForgotPassword: () => void;
@@ -23,7 +28,9 @@ interface DashLoginProps {
 export const DashLogin = ({ onForgotPassword }: DashLoginProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+  const [isPendingActivation, setIsPendingActivation] = useState(false);
+  const router = useRouter();
+  const { login } = useAuth();
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
@@ -37,13 +44,46 @@ export const DashLogin = ({ onForgotPassword }: DashLoginProps) => {
     },
   });
 
-  const onSubmit = (data: LoginSchema) => {
-    console.log(data);
+  const onSubmit = async (data: LoginSchema) => {
+    setIsLoading(true);
+    setIsPendingActivation(false);
+    try {
+      const result = await apiRequest<LoginResponse>("/auth/login", {
+        method: "POST",
+        body: { email: data.email, password: data.password },
+      });
+
+      login(result);
+      toast.success("Logged in successfully");
+
+      const dashboardRoute = getDashboardRoute(result.user);
+      router.push(dashboardRoute);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Login failed";
+      toast.error(message);
+      
+      if (message.includes("pending activation")) {
+        setIsPendingActivation(true);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleResendActivation = async () => {
+    const email = form.getValues("email");
+    if (!email) return;
+
     setIsLoading(true);
     try {
-      console.log(data);
+      await apiRequest("/auth/resend-activation", {
+        method: "POST",
+        body: { email },
+      });
+      toast.success("Activation email resent. Please check your inbox.");
+      setIsPendingActivation(false);
     } catch (error) {
-      console.log(error);
+      toast.error(error instanceof Error ? error.message : "Failed to resend activation email");
     } finally {
       setIsLoading(false);
     }
@@ -128,12 +168,28 @@ export const DashLogin = ({ onForgotPassword }: DashLoginProps) => {
             Forgot Password?
           </p>
 
+          {isPendingActivation && (
+            <div className="rounded-lg bg-orange-50 p-4 border border-orange-200 mt-4">
+              <p className="text-sm text-orange-800 mb-3 text-center">
+                Your account is not activated yet.
+              </p>
+              <Button
+                type="button"
+                className="w-full cursor-pointer rounded-xl flex items-center justify-center gap-2 bg-orange-600 text-white hover:bg-orange-700"
+                onClick={handleResendActivation}
+                disabled={isLoading}
+              >
+                {isLoading ? <Loader2 className="animate-spin" /> : "Resend Activation Email"}
+              </Button>
+            </div>
+          )}
+
           <Button
             className="w-full cursor-pointer rounded-xl flex items-center justify-center gap-2 bg-[#2016a9] text-white hover:bg-blue-600"
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading || isPendingActivation}
           >
-            {isLoading ? <Loader2 className="animate-spin" /> : "Sign In"}
+            {isLoading && !isPendingActivation ? <Loader2 className="animate-spin" /> : "Sign In"}
           </Button>
         </form>
       </Form>
