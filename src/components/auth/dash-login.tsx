@@ -14,10 +14,16 @@ import {
   FormMessage,
 } from "../ui/form";
 import Image from "next/image";
+import { Loader2 } from "lucide-react";
 
-export const DashLogin = () => {
+interface DashLoginProps {
+  onForgotPassword: () => void;
+}
+
+export const DashLogin = ({ onForgotPassword }: DashLoginProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
@@ -35,7 +41,6 @@ export const DashLogin = () => {
     console.log(data);
     setIsLoading(true);
     try {
-      // const response = await axios.post("/api/login", data);
       console.log(data);
     } catch (error) {
       console.log(error);
@@ -118,17 +123,17 @@ export const DashLogin = () => {
           <FormSuccess message="" /> */}
           <p
             className="mb-[0px] mb-[5px] cursor-pointer text-right text-sm text-[#2016a9] transition-all duration-200 hover:underline"
-            onClick={() => {
-              // const params = new URLSearchParams({
-              //   profile: profile ? String(profile) : "",
-              // });
-              // router.push(`auth/forgot-password?${params}` as never);
-            }}
+            onClick={onForgotPassword}
           >
             Forgot Password?
           </p>
-          <Button className="w-full cursor-pointer rounded-xl" type="submit">
-            Sign In
+
+          <Button
+            className="w-full cursor-pointer rounded-xl flex items-center justify-center gap-2 bg-[#2016a9] text-white hover:bg-blue-600"
+            type="submit"
+            disabled={isLoading}
+          >
+            {isLoading ? <Loader2 className="animate-spin" /> : "Sign In"}
           </Button>
         </form>
       </Form>
